@@ -1,0 +1,65 @@
+-- Create the ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create the TextBox
+local textBox = Instance.new("TextBox")
+textBox.Size = UDim2.new(0, 200, 0, 50) -- Size of the TextBox
+textBox.Position = UDim2.new(0.5, -100, 0.4, 0) -- Centered position
+textBox.PlaceholderText = "Enter increments per execution (best is 20")
+textBox.TextScaled = true
+textBox.Parent = screenGui
+
+-- Create the TextBox for total times
+local timesBox = Instance.new("TextBox")
+timesBox.Size = UDim2.new(0, 200, 0, 50) -- Size of the TextBox
+timesBox.Position = UDim2.new(0.5, -100, 0.5, 0) -- Positioned below the first TextBox
+timesBox.PlaceholderText = "Enter how much age you want"
+timesBox.TextScaled = true
+timesBox.Parent = screenGui
+
+-- Create the TextButton
+local textButton = Instance.new("TextButton")
+textButton.Size = UDim2.new(0, 200, 0, 50) -- Size of the Button
+textButton.Position = UDim2.new(0.5, -100, 0.6, 0) -- Positioned below the second TextBox
+textButton.Text = "Execute"
+textButton.TextScaled = true
+textButton.Parent = screenGui
+
+-- Connect the button click event
+local remote = game:GetService("ReplicatedStorage").Remotes:WaitForChild("AgeUp")
+local player = game.Players.LocalPlayer -- Reference to the local player
+
+textButton.MouseButton1Click:Connect(function()
+    local incrementsPerExecution = tonumber(textBox.Text) -- Get the increments from the first TextBox
+    local totalTimes = tonumber(timesBox.Text) -- Get the total times from the second TextBox
+
+    if incrementsPerExecution and totalTimes and totalTimes > 0 then
+        -- Kill the player by setting their health to 0
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.Health = 0
+        end
+
+        -- Wait for 6 seconds
+        wait(6)
+
+        -- Total increments we need to perform
+        local totalIncrements = math.ceil(totalTimes / incrementsPerExecution) -- Total sets of increments
+        local remaining = totalTimes % incrementsPerExecution -- Remaining ages to add
+
+        -- Execute increments as specified
+        for i = 1, totalIncrements do
+            for j = 1, incrementsPerExecution do
+                remote:FireServer(1) -- Fire the AgeUp event for 1 age (to be multiplied by increments)
+            end
+            wait(0.05) -- Wait for 0.05 seconds after each set of increments
+        end
+
+        -- If there is a remainder, add it after the main loop
+        if remaining > 0 then
+            remote:FireServer(remaining) -- Fire the remaining age
+        end
+    else
+        warn("Please enter valid numbers.")
+    end
+end)
