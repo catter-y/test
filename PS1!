@@ -34,7 +34,7 @@ local Settings = {
         ["Egg Purchase Amount"] = 10000, -- Amount of Eggs you want the script to purchase! (Ends After)
         ["Egg Tier"] = "Tier 17", -- What tier of egg you want purchased! (Tier 1-18) (Christmas Tier 1-4)
         ["Keep All Rainbow Pets"] = false, -- Keeps ALL rainbow pets no matter the type of pet it is when set to true!
-        ["Threads"] = 50, -- How many threads of the autobuy function running? (More Threads means faster speeds but more lagg)
+        ["Threads"] = 100, -- How many threads of the autobuy function running? (More Threads means faster speeds but more lagg)
         ["Triple Egg Open"] = false, -- If you have the Triple Egg Open gamepass set this to true, if you don't have it and set this to true the script will break!
     }
 }
